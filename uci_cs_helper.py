@@ -12,9 +12,12 @@ TRIGGER_PATTERN = re.compile(r'.*(switch(ing)?|transfer(ing)?|change?(ing)?|get(
 NUM_SUBMISSIONS = 1000  # The amount of comments to parse
 
 MESSAGE = ("Beep, boop. I'm a bot and I noticed you mentioning switching "
-            + 'into CS. /u/What_question-mark made a pretty good comment '
-            + 'about that issue. '
-            + 'You can see it here: https://www.reddit.com/r/UCI/comments/87djdj/new_student_have_questions_ask_here/dwelhou/')
+            + "into CS. /u/What_question-mark made a pretty good comment "
+            + "about that issue. It's very helpful if you are a non-CS "
+            + 'major trying to switch into CS.'
+            + 'You can see it here: https://www.reddit.com/r/UCI/comments/87djdj/new_student_have_questions_ask_here/dwelhou/'
+            + "\nBut if you are already in the ICS school, it shouldn't be too "
+            + 'hard to switch into CS or any other ICS major :).')
 
 # Where client_id and client_secret are stored
 # (client_id is in the first line, client_secret the second)
@@ -45,11 +48,62 @@ def text_about_switching_to_cs(text: str) -> bool:
     return True if TRIGGER_PATTERN.search(text) else False
 
 
+def _in_replied_to_file(submission: 'submission') -> bool:
+    """Return True if submission.id is in REPLIED_TO_FILE_NAME,
+    else False.
+    """
+    with open(REPLIED_TO_FILE_NAME) as replied_to:
+        return submission.id in replied_to
+
+
 def _reply(submission: 'submission') -> None:
     """Reply to a submission and write the submission id
     to a file to keep track of submissions the bot replied to.
     """
-    pass 
+    with open(REPLIED_TO_FILE_NAME, 'a') as replied_to:
+        if _in_replied_to_file(submission):
+            submission.reply(MESSAGE)
+            replied_to.write(submission.id)
+
+
+def _debug(hot_submissions: 'hot_submissions') -> None:
+    """Print the submission title and submission selftext
+    of each submission the bot would reply to if it were
+    actually running.
+    """
+    submission_num = 0
+    for submission in hot_submissions:
+        _print_percentage_done(submission_num / NUM_SUBMISSIONS) 
+
+        submission_num += 1
+        if text_about_switching_to_cs(submission.title):
+            print('Should reply to submission:', submission.title)
+
+        elif text_about_switching_to_cs(submission.selftext):
+            print('Should reply to selftext:', submission.selftext)
+
+    print('Finished!')
+
+
+def _run(hot_submissions: 'hot_submissions') -> None:
+    """Have the bot reply to submissions that it thinks are about
+    transferring to the CS major.
+    """
+    submission_num = 0
+    for submission in hot_submissions:
+        _print_percentage_done(submission_num / NUM_SUBMISSIONS) 
+
+        submission_num += 1
+        if text_about_switching_to_cs(submission.title):
+            _reply(submission)
+            print('Replied to', submission.title)
+
+        elif text_about_switching_to_cs(submission.selftext):
+            _reply(submission)
+            print('Replied to selftext:', submission.selftext)
+
+    print('Finished!')
+
 
 if __name__ == '__main__':
     client_id, client_secret = _get_credentials_from(CREDENTIALS_FILE_NAME)
@@ -61,18 +115,7 @@ if __name__ == '__main__':
     uci = reddit.subreddit('UCI')
 
     hot_submissions = uci.hot(limit=NUM_SUBMISSIONS)
-    current_location = 0
+    _debug(hot_submissions)
 
-    for submission in hot_submissions:
-        _print_percentage_done(current_location / NUM_SUBMISSIONS) 
 
-        current_location += 1
-        if text_about_switching_to_cs(submission.title):
-            print('Should reply to submission:', submission.title)
-            continue
 
-        elif text_about_switching_to_cs(submission.selftext):
-            print('Should reply to selftext:', submission.selftext)
-            continue
-
-    print('Finished!')
