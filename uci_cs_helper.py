@@ -27,6 +27,7 @@ CREDENTIALS_FILE_NAME = 'credentials.txt'
 REPLIED_TO_FILE_NAME = 'repliedto.txt'
 
 def _get_credentials_from(file_name: str) -> (str, str):
+    """Return a tuple with all the credentials praw.Reddit() needs."""
     credentials_tuple = tuple()
     with open(file_name) as credentials_file:
         for line in credentials_file:
@@ -61,7 +62,7 @@ def _reply(submission: 'submission') -> None:
     to a file to keep track of submissions the bot replied to.
     """
     with open(REPLIED_TO_FILE_NAME, 'a') as replied_to:
-        if _in_replied_to_file(submission):
+        if not  _in_replied_to_file(submission):
             submission.reply(MESSAGE)
             replied_to.write(submission.id)
 
@@ -115,7 +116,7 @@ if __name__ == '__main__':
     uci = reddit.subreddit('UCI')
 
     hot_submissions = uci.hot(limit=NUM_SUBMISSIONS)
-    _debug(hot_submissions)
+    _run(hot_submissions)
 
 
 
