@@ -35,6 +35,12 @@ class TestBot(unittest.TestCase):
         
         self.assertFalse(text("I want to go into kinesiology for grad school. I am currently a Bio sci major, but should I switch into public health?"))
 
+        self.assertFalse(text("Should reply to comment: I was in your position, just switch out of the major and you'll be fine. Eventhough they say you may not be able to its not true - I was able to switch out of ICS into international studies / soc sci"))
+        
+        self.assertFalse(text("I knew someone who was fed up with the parties/drinking environment at UCSB and transfered to another UC succesfully but I don't know the process she went through, so it is possible."))
+
+        
+
 if __name__ == '__main__':
     unittest.main()
 
