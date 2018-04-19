@@ -19,8 +19,9 @@ MESSAGE = ("Beep, boop. I'm a bot and I noticed you mentioning switching "
             + "\nBut if you are already in the ICS school, it shouldn't be too "
             + 'hard to switch into CS or any other ICS major :).')
 
-# Where client_id and client_secret are stored
-# (client_id is in the first line, client_secret the second)
+# Where client_id, client_secret, and the bot's username and
+# password are stored
+# (client_id is in the first line, client_secret the second, etc.)
 CREDENTIALS_FILE_NAME = 'credentials.txt' 
 
 # Stores the submission id's of all submissions the bot replied to
@@ -56,15 +57,14 @@ def _in_replied_to_file(submission: 'submission') -> bool:
     with open(REPLIED_TO_FILE_NAME) as replied_to:
         return submission.id in replied_to
 
-
 def _reply(submission: 'submission') -> None:
     """Reply to a submission and write the submission id
     to a file to keep track of submissions the bot replied to.
     """
     with open(REPLIED_TO_FILE_NAME, 'a') as replied_to:
-        if not  _in_replied_to_file(submission):
+        if not _in_replied_to_file(submission):
             submission.reply(MESSAGE)
-            replied_to.write(submission.id)
+            replied_to.write(submission.id + '\n')
 
 
 def _debug(hot_submissions: 'hot_submissions') -> None:
@@ -74,6 +74,10 @@ def _debug(hot_submissions: 'hot_submissions') -> None:
     """
     submission_num = 0
     for submission in hot_submissions:
+        if _in_replied_to_file(submission):
+            print('Submission ' + submission.id + ' was already replied to.')
+            continue
+
         _print_percentage_done(submission_num / NUM_SUBMISSIONS) 
 
         submission_num += 1
@@ -86,7 +90,7 @@ def _debug(hot_submissions: 'hot_submissions') -> None:
     print('Finished!')
 
 
-def _run(hot_submissions: 'hot_submissions') -> None:
+def _run_bot(hot_submissions: 'hot_submissions') -> None:
     """Have the bot reply to submissions that it thinks are about
     transferring to the CS major.
     """
@@ -107,16 +111,18 @@ def _run(hot_submissions: 'hot_submissions') -> None:
 
 
 if __name__ == '__main__':
-    client_id, client_secret = _get_credentials_from(CREDENTIALS_FILE_NAME)
+    client_id, client_secret, my_username, my_password = _get_credentials_from(CREDENTIALS_FILE_NAME)
 
     reddit = praw.Reddit(client_id=client_id,
             client_secret=client_secret,
-            user_agent='UCI_CS_Helper_Bot')
+            user_agent='UCI_CS_Helper_Bot by /u/The_Atomic_Comb',
+            username=my_username,
+            password=my_password)
 
     uci = reddit.subreddit('UCI')
 
     hot_submissions = uci.hot(limit=NUM_SUBMISSIONS)
-    _run(hot_submissions)
+    _run_bot(hot_submissions)
 
 
 
