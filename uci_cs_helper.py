@@ -55,7 +55,12 @@ def _in_replied_to_file(submission: 'submission') -> bool:
     else False.
     """
     with open(REPLIED_TO_FILE_NAME) as replied_to:
-        return submission.id in replied_to
+        for line in replied_to:
+            if submission.id in line:
+                return True
+
+    return False
+
 
 def _reply(submission: 'submission') -> None:
     """Reply to a submission and write the submission id
@@ -82,10 +87,10 @@ def _debug(hot_submissions: 'hot_submissions') -> None:
 
         submission_num += 1
         if text_about_switching_to_cs(submission.title):
-            print('Should reply to submission:', submission.title)
+            print('Should reply to submission:', submission.id, submission.title)
 
         elif text_about_switching_to_cs(submission.selftext):
-            print('Should reply to selftext:', submission.selftext)
+            print('Should reply to selftext:', submission.id, submission.title)
 
     print('Finished!')
 
@@ -123,6 +128,3 @@ if __name__ == '__main__':
 
     hot_submissions = uci.hot(limit=NUM_SUBMISSIONS)
     _run_bot(hot_submissions)
-
-
-
