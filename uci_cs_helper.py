@@ -14,9 +14,9 @@ NUM_SUBMISSIONS = 1000  # The amount of comments to parse
 MESSAGE = ("Beep, boop. I'm a bot and I noticed you mentioning switching "
             + "into CS. /u/What_question-mark made a pretty good comment "
             + "about that issue. It's very helpful if you are a non-CS "
-            + 'major trying to switch into CS.'
+            + 'major trying to switch into CS. '
             + 'You can see it here: https://www.reddit.com/r/UCI/comments/87djdj/new_student_have_questions_ask_here/dwelhou/'
-            + "\nBut if you are already in the ICS school, it shouldn't be too "
+            + "\n\nBut if you are already in the ICS school, it shouldn't be too "
             + 'hard to switch into CS or any other ICS major :).')
 
 # Where client_id, client_secret, and the bot's username and
@@ -81,6 +81,7 @@ def _debug(hot_submissions: 'hot_submissions') -> None:
     for submission in hot_submissions:
         if _in_replied_to_file(submission):
             print('Submission ' + submission.id + ' was already replied to.')
+            print('\tTitle:', submission.title)
             continue
 
         _print_percentage_done(submission_num / NUM_SUBMISSIONS) 
@@ -115,6 +116,18 @@ def _run_bot(hot_submissions: 'hot_submissions') -> None:
     print('Finished!')
 
 
+def _determine_intent(hot_submissions: 'hot_submissions') -> None:
+    """Determine if the bot should be run in debug mode instead of
+    actually running.
+    """
+    debug_or_not = input('Run the bot in debug mode? ')
+
+    if debug_or_not.startswith('n') or debug_or_not.startswith('N'):
+        _run_bot(hot_submissions)
+    else:
+        _debug(hot_submissions)
+
+
 if __name__ == '__main__':
     client_id, client_secret, my_username, my_password = _get_credentials_from(CREDENTIALS_FILE_NAME)
 
@@ -127,4 +140,5 @@ if __name__ == '__main__':
     uci = reddit.subreddit('UCI')
 
     hot_submissions = uci.hot(limit=NUM_SUBMISSIONS)
-    _run_bot(hot_submissions)
+    _determine_intent(hot_submissions)
+
