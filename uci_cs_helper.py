@@ -12,20 +12,21 @@ TRIGGER_PATTERN = re.compile(r'.*(switch(ing)?|transfer(ing)?|change?(ing)?|get(
 NUM_SUBMISSIONS = 1000  # The amount of comments to parse
 
 MESSAGE = ("Beep, boop. I'm a bot and I noticed you mentioning switching "
-            + "into CS. /u/What_question-mark made a pretty good comment "
-            + "about that issue. It's very helpful if you are a non-CS "
-            + 'major trying to switch into CS. '
-            + 'You can see it here: https://www.reddit.com/r/UCI/comments/87djdj/new_student_have_questions_ask_here/dwelhou/'
-            + "\n\nBut if you are already in the ICS school, it shouldn't be too "
-            + 'hard to switch into CS or any other ICS major :).')
+           + "into CS. /u/What_question-mark made a pretty good comment "
+           + "about that issue. It's very helpful if you are a non-CS "
+           + 'major trying to switch into CS. '
+           + 'You can see it here: https://www.reddit.com/r/UCI/comments/87djdj/new_student_have_questions_ask_here/dwelhou/'
+           + "\n\nBut if you are already in the ICS school, it shouldn't be too "
+           + 'hard to switch into CS or any other ICS major :).')
 
 # Where client_id, client_secret, and the bot's username and
 # password are stored
 # (client_id is in the first line, client_secret the second, etc.)
-CREDENTIALS_FILE_NAME = 'credentials.txt' 
+CREDENTIALS_FILE_NAME = 'credentials.txt'
 
 # Stores the submission id's of all submissions the bot replied to
 REPLIED_TO_FILE_NAME = 'repliedto.txt'
+
 
 def _get_credentials_from(file_name: str) -> (str, str):
     """Return a tuple with all the credentials praw.Reddit() needs."""
@@ -84,14 +85,16 @@ def _debug(hot_submissions: 'hot_submissions') -> None:
             print('\tTitle:', submission.title)
             continue
 
-        _print_percentage_done(submission_num / NUM_SUBMISSIONS) 
+        _print_percentage_done(submission_num / NUM_SUBMISSIONS)
 
         submission_num += 1
         if text_about_switching_to_cs(submission.title):
-            print('Should reply to submission:', submission.id, submission.title)
+            print('Should reply to submission:', end=' ')
+            print(submission.id, submission.title)
 
         elif text_about_switching_to_cs(submission.selftext):
-            print('Should reply to selftext:', submission.id, submission.title)
+            print('Should reply to selftext:', end=' ')
+            print(submission.id, submission.title)
 
     print('Finished!')
 
@@ -102,7 +105,7 @@ def _run_bot(hot_submissions: 'hot_submissions') -> None:
     """
     submission_num = 0
     for submission in hot_submissions:
-        _print_percentage_done(submission_num / NUM_SUBMISSIONS) 
+        _print_percentage_done(submission_num / NUM_SUBMISSIONS)
 
         submission_num += 1
         if text_about_switching_to_cs(submission.title):
@@ -129,16 +132,17 @@ def _determine_intent(hot_submissions: 'hot_submissions') -> None:
 
 
 if __name__ == '__main__':
-    client_id, client_secret, my_username, my_password = _get_credentials_from(CREDENTIALS_FILE_NAME)
+    credentials_tuple = _get_credentials_from(CREDENTIALS_FILE_NAME)
+    client_id, client_secret, username, password = credentials_tuple
 
+    user_agent = 'UCI_CS_Helper_Bot by /u/The_Atomic_Comb'
     reddit = praw.Reddit(client_id=client_id,
-            client_secret=client_secret,
-            user_agent='UCI_CS_Helper_Bot by /u/The_Atomic_Comb',
-            username=my_username,
-            password=my_password)
+                         client_secret=client_secret,
+                         user_agent=user_agent
+                         username=username,
+                         password=password)
 
     uci = reddit.subreddit('UCI')
 
     hot_submissions = uci.hot(limit=NUM_SUBMISSIONS)
     _determine_intent(hot_submissions)
-
