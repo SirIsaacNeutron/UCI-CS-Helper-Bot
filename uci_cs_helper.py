@@ -138,7 +138,7 @@ if __name__ == '__main__':
     user_agent = 'UCI_CS_Helper_Bot by /u/The_Atomic_Comb'
     reddit = praw.Reddit(client_id=client_id,
                          client_secret=client_secret,
-                         user_agent=user_agent
+                         user_agent=user_agent,
                          username=username,
                          password=password)
 
