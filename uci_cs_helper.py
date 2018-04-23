@@ -1,4 +1,6 @@
 """
+The logic for the bot. Upon running the bot, the user will be asked whether
+he wants to run the bot in debug mode or not. Running in debug mode will have the bot display which submissions it would respond to if it were actually running.
 
 @author SirIsaacNeutron
 """
@@ -78,6 +80,7 @@ def _debug(hot_submissions: 'hot_submissions') -> None:
     of each submission the bot would reply to if it were
     actually running.
     """
+    print('DEBUG MODE')
     submission_num = 0
     for submission in hot_submissions:
         if _in_replied_to_file(submission):
@@ -103,6 +106,7 @@ def _run_bot(hot_submissions: 'hot_submissions') -> None:
     """Have the bot reply to submissions that it thinks are about
     transferring to the CS major.
     """
+    print('Running...')
     submission_num = 0
     for submission in hot_submissions:
         _print_percentage_done(submission_num / NUM_SUBMISSIONS)
