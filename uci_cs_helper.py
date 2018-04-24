@@ -88,17 +88,17 @@ def _debug(hot_submissions: 'hot_submissions') -> None:
             print('\tTitle:', submission.title)
             continue
 
-        _print_percentage_done(submission_num / NUM_SUBMISSIONS)
-
         submission_num += 1
         if text_about_switching_to_cs(submission.title):
             print('Should reply to submission:', end=' ')
             print(submission.id, submission.title)
 
+            _print_percentage_done(submission_num / NUM_SUBMISSIONS)
         elif text_about_switching_to_cs(submission.selftext):
             print('Should reply to selftext:', end=' ')
-            print(submission.id, submission.title)
+            print(submission.id, submission.selftext)
 
+            _print_percentage_done(submission_num / NUM_SUBMISSIONS)
     print('Finished!')
 
 
@@ -109,16 +109,17 @@ def _run_bot(hot_submissions: 'hot_submissions') -> None:
     print('Running...')
     submission_num = 0
     for submission in hot_submissions:
-        _print_percentage_done(submission_num / NUM_SUBMISSIONS)
-
         submission_num += 1
         if text_about_switching_to_cs(submission.title):
             _reply(submission)
             print('Replied to', submission.title)
 
+            _print_percentage_done(submission_num / NUM_SUBMISSIONS)
         elif text_about_switching_to_cs(submission.selftext):
             _reply(submission)
             print('Replied to selftext:', submission.selftext)
+
+            _print_percentage_done(submission_num / NUM_SUBMISSIONS)
 
     print('Finished!')
 
