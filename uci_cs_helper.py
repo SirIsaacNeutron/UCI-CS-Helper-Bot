@@ -137,9 +137,8 @@ def _determine_intent(hot_submissions: 'hot_submissions') -> None:
 
 if __name__ == '__main__':
     credentials_tuple = _get_credentials_from(CREDENTIALS_FILE_NAME)
-    client_id, client_secret, username, password = credentials_tuple
+    client_id, client_secret, user_agent, username, password = credentials_tuple
 
-    user_agent = 'UCI_CS_Helper_Bot by /u/The_Atomic_Comb'
     reddit = praw.Reddit(client_id=client_id,
                          client_secret=client_secret,
                          user_agent=user_agent,
