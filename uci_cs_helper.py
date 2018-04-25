@@ -69,9 +69,8 @@ def _reply(submission: 'submission') -> None:
     to a file to keep track of submissions the bot replied to.
     """
     with open(REPLIED_TO_FILE_NAME, 'a') as replied_to:
-        if not _in_replied_to_file(submission):
-            submission.reply(MESSAGE)
-            replied_to.write(submission.id + '\n')
+        submission.reply(MESSAGE)
+        replied_to.write(submission.id + '\n')
 
 
 def _debug(hot_submissions: 'hot_submissions') -> None:
@@ -108,6 +107,11 @@ def _run_bot(hot_submissions: 'hot_submissions') -> None:
     print('Running...')
     submission_num = 0
     for submission in hot_submissions:
+        if _in_replied_to_file(submission):
+            print('Submission ' + submission.id + ' was already replied to.')
+            print('\tTitle:', submission.title)
+            continue
+
         submission_num += 1
         if text_about_switching_to_cs(submission.title):
             _reply(submission)
