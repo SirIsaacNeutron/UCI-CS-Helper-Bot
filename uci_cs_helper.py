@@ -8,7 +8,7 @@ he wants to run the bot in debug mode or not. Running in debug mode will have th
 import praw
 import re
 
-TRIGGER_PATTERN = re.compile(r'.*(switch(ing)?|transfer(ing)?[^red]|change?(ing)?|get(ing)?\s?in(to)?).*([^a-z]cs[^a-z]|comp(uter)?\ssci(ence)?)', re.IGNORECASE)
+TRIGGER_PATTERN = re.compile(r'.*(switch(ing)?|transfer(ing)?[^red](to|into)|change?(ing)?|get(ing)?\s?in(to)?).*([^a-z]cs[^a-z]|comp(uter)?\ssci(ence)?)', re.IGNORECASE)
 
 NUM_SUBMISSIONS = 1000  # The amount of comments to parse
 
