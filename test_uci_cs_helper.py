@@ -41,6 +41,7 @@ class TestBot(unittest.TestCase):
 
         self.assertFalse(text("Hi everyone. I’m a transfer student from SD and I’m trying to decide between uci and csuf for sociology. I get a pretty good financial aid package so cost isn’t really that big of a deal for me. Any Soc majors on this sub that can share their experience with the program? Thanks :)"))
 
+        self.assertFalse(text("So I transferred here as a 3rd year CS major but then I had to switch to U/U because of Academic Probation."))
 
 if __name__ == '__main__':
     unittest.main()
