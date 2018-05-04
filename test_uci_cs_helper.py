@@ -43,6 +43,8 @@ class TestBot(unittest.TestCase):
 
         self.assertFalse(text("So I transferred here as a 3rd year CS major but then I had to switch to U/U because of Academic Probation."))
 
+        self.assertFalse(text("I'm an incoming UCI transfer and have to take a lot of CS lower-division classes due to them not being articulated. I still have to do placement exams but, wanted to know what classes are usually available during the summer. Would they have classes for my major CS, or is it usually just GE classes. I already planned which classes i'd have to take depending on what placement exams I pass but I didn't factor in taking summer classes, which I hope will help speed up the process. Any feedback would be appreciated!"))
+
 if __name__ == '__main__':
     unittest.main()
 
