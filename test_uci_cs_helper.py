@@ -69,6 +69,15 @@ class TestBot(unittest.TestCase):
                         + "factor in taking summer classes, which I hope will help speed up the process. Any feedback would be"
                         + " appreciated!"))
 
+        # Make sure the bot doesn't respond to every selftext with "changed"
+        # and "CS" in it
+        self.assertFalse(text("Hey, incoming freshman to UC Irvine. I am "
+                        + "probably going to go into the CHP program, but I"                        
+                        + " can't seem to find a clear answer on how the CHP"
+                        + " program (Humcore, Soccore) will actually change which GE requirements and courses "
+                        + "I would take relative to not doing CHP. I plan on majoring in CS."))
+
+
 if __name__ == '__main__':
     unittest.main()
 
