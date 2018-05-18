@@ -7,6 +7,7 @@ he wants to run the bot in debug mode or not. Running in debug mode will have th
 
 import praw
 import re
+import argparse
 
 TRIGGER_PATTERN = re.compile(r'(switch(ing)?|transfer(ring)?\s*(in|into|to)|change?(ing)?|get(ing)?\s*in(to)?).{1,30}([^a-z]cs[^a-z]|comp(uter)?\s*sci(ence)?)', re.IGNORECASE)
 
@@ -127,16 +128,19 @@ def _run_bot(hot_submissions: 'hot_submissions') -> None:
     print('Finished!')
 
 
-def _determine_intent(hot_submissions: 'hot_submissions') -> None:
-    """Determine if the bot should be run in debug mode instead of
-    actually running.
-    """
-    debug_or_not = input('Run the bot in debug mode? ')
+def _create_arg_parser() -> argparse.ArgumentParser:
+    """Create all the command line functionality for the bot."""
+    arg_parser = argparse.ArgumentParser(description='A bot for Reddit to help out Anteaters who want to switch into CS')
+    arg_parser.add_argument('-r', '--run',
+            dest='run_bot',
+            help='have the bot actually reply to submissions',
+            action='store_true')
+    arg_parser.add_argument('-d', '--debug',
+                        dest='debug_bot',
+                        help='merely display the submissions the bot would reply to',
+                        action='store_true')
 
-    if debug_or_not.startswith('n') or debug_or_not.startswith('N'):
-        _run_bot(hot_submissions)
-    else:
-        _debug(hot_submissions)
+    return arg_parser 
 
 
 if __name__ == '__main__':
@@ -152,4 +156,13 @@ if __name__ == '__main__':
     uci = reddit.subreddit('UCI')
 
     hot_submissions = uci.hot(limit=NUM_SUBMISSIONS)
-    _determine_intent(hot_submissions)
+
+    arg_parser = _create_arg_parser()
+    args_dict = vars(arg_parser.parse_args())
+    
+    if args_dict['debug_bot'] is True:
+        _debug(hot_submissions)
+    elif args_dict['run_bot'] is True:
+        _run_bot(hot_submissions)
+    else:
+        arg_parser.print_help()
