@@ -31,6 +31,8 @@ class TestBot(unittest.TestCase):
         
         self.assertTrue(text("How Hard Is It To Transfer To Computer Science Major?"))
 
+        self.assertTrue(text('Just wondering if anyone has experience transferring into CS'))
+
     def test_detecting_texts_false(self) -> None:
         """Test the bot to make sure it does not reply to text
         that is not about switiching to CS from another major.
