@@ -11,7 +11,7 @@ import argparse
 
 TRIGGER_PATTERN = re.compile(r'(switch(ing)?|transfer(ring)?\s*(in|into|to)|change?(ing)?|get(ing)?\s*in(to)?).{1,30}([^a-z]cs[^a-z]|comp(uter)?\s*sci(ence)?)', re.IGNORECASE)
 
-NUM_SUBMISSIONS = 1000  # The amount of comments to parse
+NUM_SUBMISSIONS = 1000  # The amount of submissions to parse
 
 MESSAGE = ("Beep, boop. I'm a bot and I noticed you mentioning switching "
            + "into CS. /u/What_question-mark made a pretty good comment "
