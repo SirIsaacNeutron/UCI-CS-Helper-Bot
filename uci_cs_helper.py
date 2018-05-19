@@ -143,7 +143,10 @@ def _create_arg_parser() -> argparse.ArgumentParser:
     return arg_parser 
 
 
-if __name__ == '__main__':
+def _initialize_bot_and_get_hot_subms() -> 'hot_submissions':
+    """Log the bot into Reddit and return a ListingGenerator representing 
+    hot submissions from the UCI subreddit.
+    """
     credentials_tuple = _get_credentials_from(CREDENTIALS_FILE_NAME)
     client_id, client_secret, user_agent, username, password = credentials_tuple
 
@@ -154,15 +157,20 @@ if __name__ == '__main__':
                          password=password)
 
     uci = reddit.subreddit('UCI')
-
     hot_submissions = uci.hot(limit=NUM_SUBMISSIONS)
 
+    return hot_submissions
+
+
+if __name__ == '__main__':
     arg_parser = _create_arg_parser()
     args_dict = vars(arg_parser.parse_args())
     
     if args_dict['debug_bot'] is True:
+        hot_submissions = _initialize_bot_and_get_hot_subms()
         _debug(hot_submissions)
     elif args_dict['run_bot'] is True:
+        hot_submissions = _initialize_bot_and_get_hot_subms()
         _run_bot(hot_submissions)
     else:
         arg_parser.print_help()
