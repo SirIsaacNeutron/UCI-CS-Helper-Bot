@@ -8,6 +8,31 @@ Unfortuately, I was unable to get the bot to deal with comments. In its current 
 
 However, despite my bot's limitations, I am satisfied with it, and I am happy to show its source code to the world.
 
+## Usage
+(For MacOS High Sierra.)
+
+To get a help message showing how to use the bot:
+```
+python3 uci_cs_helper.py
+```
+
+To run the bot in debug mode (show which messages the bot would respond to if it were actually running, without responding to them):
+```
+python3 uci_cs_helper.py -d
+```
+or 
+```
+python3 uci_cs_helper.py --debug
+```
+
+To actually run the bot (have the bot respond to submissions on Reddit):
+```
+python3 uci_cs_helper.py -r
+```
+or
+```
+python3 uci_cs_helper.py --run
+```
 
 ## Built With
 * [PRAW](https://github.com/praw-dev/praw) -- "a python package that allows for simple access to Reddit's API."
